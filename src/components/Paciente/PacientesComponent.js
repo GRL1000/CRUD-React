@@ -63,7 +63,7 @@ const PacientesComponent = () => {
       headerName: "Domicilio",
       description: "No se puede reorganizar.",
       sortable: false,
-      width: 90,
+      width: 240,
       valueGetter: (params) =>
         `${params.row.domicilio}`,
     },

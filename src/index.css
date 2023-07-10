@@ -8,6 +8,31 @@
   background-color: #1C8EF9;
 }
 
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #1C8EF9;
+}
+
+.form-inner {
+  width: 450px;
+  background: #ffffff;
+  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+  padding: 40px 55px 45px 55px;
+  border-radius: 15px;
+  transition: all .3s;
+}
+
+.form-inner h3 {
+  text-align: center;
+  margin: 0;
+  line-height: 1;
+  padding-bottom: 20px;
+  color: #000000;
+}
+
 .login-inner {
   width: 450px;
   background: #ffffff;
@@ -30,8 +55,18 @@
   box-shadow: none;
 }
 
+.form-container .form-control:focus {
+  border-color: #167bff;
+  box-shadow: none;
+}
+
 .login-inner .form-label,
 .login-inner .form-control {
+  color: #000000;
+}
+
+.form-inner .form-label,
+.form-inner .form-control {
   color: #000000;
 }
 
