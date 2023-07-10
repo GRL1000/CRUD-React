@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Box from "@mui/material/Box";
+import LinearProgress from "@mui/material/LinearProgress";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
-import {
-  Button,
-  SpeedDial,
-  SpeedDialAction,
-  SpeedDialIcon,
-} from "@mui/material";
+import { Button, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
 
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -230,6 +227,15 @@ function EditarPacienteComponent() {
                 value={paciente.domicilio}
                 onChange={(e) => inputChange(e)}
               />
+              <div align="center">
+                {loading ? (
+                  <Box sx={{ display: "100%" }}>
+                    <LinearProgress />
+                  </Box>
+                ) : (
+                  ""
+                )}
+              </div>
             </div>
           </div>
         </div>
