@@ -46,42 +46,46 @@ const LoginComponent = () => {
 
 
   return (
-    <form onSubmit={fnLogin}>
-      <h3>Em Imma</h3>
-      <img className='img' src={img} alt="Image" />
-      <div className="mb-3">
-        <label>Correo Electrónico</label>
-        <input
-          type="email"
-          className="form-control"
-          placeholder="Ingresa correo"
-          name='email'
-          value={dLogin.email} onChange={(e) => inputChange(e)}
-        />
+    <div className='login-container'>
+      <div className='login-inner'>
+        <form onSubmit={fnLogin}>
+          <h3>Em Imma</h3>
+          <img className='login-img' src={img} alt="Image" />
+          <div className="mb-3">
+            <label>Correo Electrónico</label>
+            <input
+              type="email"
+              className="form-control"
+              placeholder="Ingresa correo"
+              name='email'
+              value={dLogin.email} onChange={(e) => inputChange(e)}
+            />
+          </div>
+          <div className="mb-3">
+            <label>Contraseña</label>
+            <input
+              type="password"
+              className="form-control"
+              placeholder="Ingresa contraseña"
+              name='password'
+              value={dLogin.password} onChange={(e) => inputChange(e)} />
+          </div>
+          <div className="mb-3">
+            <div className="custom-control custom-checkbox">
+            </div>
+            <div>
+              <p></p>
+            </div>
+          </div>
+          <div className="d-grid">
+            <button type="submit" className="btn btn-primary" onClick={fnLogin}>
+              Ingresar
+            </button>
+          </div>
+          <br></br>
+        </form>
       </div>
-      <div className="mb-3">
-        <label>Contraseña</label>
-        <input
-          type="password"
-          className="form-control"
-          placeholder="Ingresa contraseña"
-          name='password'
-          value={dLogin.password} onChange={(e) => inputChange(e)} />
-      </div>
-      <div className="mb-3">
-        <div className="custom-control custom-checkbox">
-        </div>
-        <div>
-          <p></p>
-        </div>
-      </div>
-      <div className="d-grid">
-        <button type="submit" className="btn btn-primary" onClick={fnLogin}>
-          Ingresar
-        </button>
-      </div>
-      <br></br>
-    </form>
+    </div>
   );
 };
 
