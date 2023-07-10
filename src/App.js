@@ -6,6 +6,9 @@ import LoginComponent from "./components/LoginComponent";
 import PacientesComponent from "./components/Paciente/PacientesComponent";
 import NuevoPacienteComponent from "./components/Paciente/NuevoPacienteComponent";
 import EditarPacienteComponent from "./components/Paciente/EditarPacienteComponent";
+import DoctoresComponent from './components/Doctor/DoctoresComponent';
+import NuevoDoctorComponent from './components/Doctor/NuevoDoctorComponent';
+import EditarDoctorComponent from './components/Doctor/EditarDoctorComponent';
 
 import { useEffect, useState } from "react";
 
@@ -34,6 +37,18 @@ function App() {
         <Route
           path="/paciente/editar"
           element={token == null ? <LoginComponent /> : <EditarPacienteComponent />}
+        />
+        <Route
+          path="/doctores"
+          element={token == null ? <LoginComponent /> : <DoctoresComponent />}
+        />
+        <Route
+          path="/doctor/nuevo"
+          element={token == null ? <LoginComponent /> : <NuevoDoctorComponent />}
+        />
+        <Route
+          path="/doctor/editar"
+          element={token == null ? <LoginComponent /> : <EditarDoctorComponent />}
         />
       </Routes>
     </Router>
