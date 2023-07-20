@@ -7,9 +7,7 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { useNavigate, Link } from "react-router-dom";
 import FileCopyIcon from "@mui/icons-material/FileCopyOutlined";
-import LogOutIcon from "@mui/icons-material/LogoutOutlined";
 import secureLocalStorage from "react-secure-storage";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 
@@ -90,24 +88,24 @@ const PacientesComponent = () => {
   }
 
   const [isExpanded, setExpendState] = useState(false);
-	const menuItems = [
-		{
-			text: "Paciente",
-			icon: "icons/user.svg",
-		},
-		{
-			text: "Doctor",
-			icon: "icons/user.svg",
-		},
-		{
-			text: "Enfermedad",
-			icon: "icons/heart.svg",
-		},
-		{
-			text: "Cita",
-			icon: "icons/message.svg",
-		},
-	];
+  const menuItems = [
+    {
+      text: "Paciente",
+      icon: "icons/user.svg",
+    },
+    {
+      text: "Doctor",
+      icon: "icons/user.svg",
+    },
+    {
+      text: "Enfermedad",
+      icon: "icons/heart.svg",
+    },
+    {
+      text: "Cita",
+      icon: "icons/message.svg",
+    },
+  ];
 
   const getLinkToComponent = (text) => {
     switch (text) {
@@ -122,7 +120,7 @@ const PacientesComponent = () => {
       default:
         return "/";
     }
-  };  
+  };
 
   return (
     <div className="main-container">
@@ -130,7 +128,7 @@ const PacientesComponent = () => {
         isExpanded
           ? "side-nav-container"
           : "side-nav-container side-nav-container-NX"
-        }>
+      }>
         <div className="nav-upper">
           <div className="nav-heading">
             {isExpanded && (
