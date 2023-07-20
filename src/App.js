@@ -1,7 +1,6 @@
 import './index.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-
 import LoginComponent from "./components/LoginComponent";
 import PacientesComponent from "./components/Paciente/PacientesComponent";
 import NuevoPacienteComponent from "./components/Paciente/NuevoPacienteComponent";
@@ -12,6 +11,10 @@ import EditarDoctorComponent from './components/Doctor/EditarDoctorComponent';
 import EnfermedadesComponent from './components/Enfermedad/EnfermedadesComponent';
 import NuevaEnfermedadComponent from './components/Enfermedad/NuevaEnfermedadComponent';
 import EditarEnfermedadComponent from './components/Enfermedad/EditarEnfermedadComponent';
+import CitasComponent from './components/Cita/CitasComponent';
+import NuevaCitaComponent from './components/Cita/NuevaCitaComponent';
+import EditarCitaComponent from './components/Cita/EditarCitaComponent';
+
 
 import { useEffect, useState } from "react";
 
@@ -53,7 +56,6 @@ function App() {
           path="/doctor/editar"
           element={token == null ? <LoginComponent /> : <EditarDoctorComponent />}
         />
-
         <Route
           path="/enfermedades"
           element={token == null ? <LoginComponent /> : <EnfermedadesComponent />}
@@ -65,6 +67,19 @@ function App() {
         <Route
           path="/enfermedad/editar"
           element={token == null ? <LoginComponent /> : <EditarEnfermedadComponent />}
+        />
+
+        <Route
+          path="/citas"
+          element={token == null ? <LoginComponent /> : <CitasComponent />}
+        />
+        <Route
+          path="/cita/nuevo"
+          element={token == null ? <LoginComponent /> : <NuevaCitaComponent />}
+        />
+        <Route
+          path="/cita/editar"
+          element={token == null ? <LoginComponent /> : <EditarCitaComponent />}
         />
       </Routes>
     </Router>

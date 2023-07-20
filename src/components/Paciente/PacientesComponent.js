@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from "react";
-
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, Link } from "react-router-dom";
 import FileCopyIcon from "@mui/icons-material/FileCopyOutlined";
 import LogOutIcon from "@mui/icons-material/LogoutOutlined";
 import secureLocalStorage from "react-secure-storage";
 import Button from "@mui/material/Button";
-
 import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 
@@ -92,50 +89,139 @@ const PacientesComponent = () => {
     navigate("/");
   }
 
+  const [isExpanded, setExpendState] = useState(false);
+	const menuItems = [
+		{
+			text: "Paciente",
+			icon: "icons/user.svg",
+		},
+		{
+			text: "Doctor",
+			icon: "icons/user.svg",
+		},
+		{
+			text: "Enfermedad",
+			icon: "icons/heart.svg",
+		},
+		{
+			text: "Cita",
+			icon: "icons/message.svg",
+		},
+	];
+
+  const getLinkToComponent = (text) => {
+    switch (text) {
+      case "Paciente":
+        return "/pacientes";
+      case "Doctor":
+        return "/doctores";
+      case "Enfermedad":
+        return "/enfermedades";
+      case "Cita":
+        return "/citas";
+      default:
+        return "/";
+    }
+  };  
+
   return (
-    <div className="container" style={{ marginLeft: 'auto', marginRight: '10px' }}>
-      <br />
-      {loading ? (
-        <Box sx={{ width: "100%" }}>
-          <LinearProgress />
-        </Box>
-      ) : (
-        ""
-      )}
-      <div className="table-responsive">
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          pageSizeOptions={[5, 10]}
-          onRowClick={handleRowClick}
-        />
+    <div className="main-container">
+      <div className={
+        isExpanded
+          ? "side-nav-container"
+          : "side-nav-container side-nav-container-NX"
+        }>
+        <div className="nav-upper">
+          <div className="nav-heading">
+            {isExpanded && (
+              <div className="nav-brand">
+                <img src="icons/Logo.svg" alt="" srcset="" />
+                <h2>Hospital</h2>
+              </div>
+            )}
+            <button
+              className={
+                isExpanded ? "hamburger hamburger-in" : "hamburger hamburger-out"
+              }
+              onClick={() => setExpendState(!isExpanded)}
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </div>
+          <div className="nav-menu">
+            {menuItems.map(({ text, icon }) => (
+              <Link
+                key={text}
+                to={getLinkToComponent(text)}
+                className={isExpanded ? "menu-item" : "menu-item menu-item-NX"}
+                href="#"
+              >
+                <img className="menu-item-icon" src={icon} alt="" srcset="" />
+                {isExpanded && <p>{text}</p>}
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        <div className="nav-footer">
+          {isExpanded && (
+            <div className="nav-details">
+              <img
+                className="nav-footer-avatar"
+                src="icons/img.jpg"
+                alt=""
+                srcset=""
+              />
+              <div className="nav-footer-info">
+                <p className="nav-footer-user-name">Em Imma</p>
+                <p className="nav-footer-user-position">store admin</p>
+              </div>
+            </div>
+          )}
+          <img className="logout-icon" src="./icons/logout.svg" alt="" srcset="" onClick={fnLogout} />
+        </div>
       </div>
-      <SpeedDial
-        ariaLabel="SpeedDial basic example"
-        sx={{ position: "absolute", bottom: 20, right: 20 }}
-        icon={<SpeedDialIcon />}
-      >
-        {actions.map((action) => (
-          <SpeedDialAction
-            key={action.name}
-            icon={action.icon}
-            tooltipTitle={action.name}
-            onClick={(e) => {
-              handleFunction(e, action.key);
+      <div className="container" style={{ marginLeft: isExpanded ? '0px' : '10px' }}>
+        <br />
+        {loading ? (
+          <Box sx={{ width: "100%" }}>
+            <LinearProgress />
+          </Box>
+        ) : (
+          ""
+        )}
+        <div className="table-responsive">
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
             }}
+            pageSizeOptions={[5, 10]}
+            onRowClick={handleRowClick}
           />
-        ))}
-      </SpeedDial>
-      <br></br>
-      <div className="d-flex align-items-center justify-content-center">
-        <Button variant="contained" onClick={fnLogout} icon={<LogOutIcon />}>
-          Cerrar sesión
-        </Button>
+        </div>
+        <SpeedDial
+          ariaLabel="SpeedDial basic example"
+          sx={{ position: "absolute", bottom: 20, right: 20 }}
+          icon={<SpeedDialIcon />}
+        >
+          {actions.map((action) => (
+            <SpeedDialAction
+              key={action.name}
+              icon={action.icon}
+              tooltipTitle={action.name}
+              onClick={(e) => {
+                handleFunction(e, action.key);
+              }}
+            />
+          ))}
+        </SpeedDial>
+        <br></br>
       </div>
     </div>
   );
