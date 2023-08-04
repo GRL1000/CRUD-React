@@ -58,7 +58,7 @@ const CitasComponent = () => {
       field: "fecha",
       headerName: "Fecha",
       type: "text",
-      width: 90,
+      width: 100,
     },
     {
       field: "hora",

@@ -8,13 +8,15 @@ import SaveIcon from "@mui/icons-material/Save";
 import { Button, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
 import { LocalizationProvider, DatePicker } from "@mui/lab";
 import AdapterDayjs from "@mui/lab/AdapterDayjs";
-
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
+import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
+import dayjs from 'dayjs';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -69,6 +71,9 @@ function EditarCitaComponent() {
             .then((response) => {
                 console.log(response.data);
                 setCita(response.data);
+                const { fecha, hora, ...citaData } = response.data;
+                setSelectedFecha(dayjs(fecha));
+                setSelectedHora(dayjs(hora, 'hh:mm A'));
                 setLoading(false);
             })
             .catch((error) => { });
@@ -113,6 +118,32 @@ function EditarCitaComponent() {
 
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const [selectedPaciente, setSelectedPaciente] = useState(null);
+    const [selectedEnfermedad, setSelectedEnfermedad] = useState(null);
+    const [selectedDoctor, setSelectedDoctor] = useState(null);
+    const [selectedFecha, setSelectedFecha] = useState(cita.fecha);
+    const [selectedHora, setSelectedHora] = useState(cita.hora);
+
+    const handleDateChange = (newValue) => {
+        setSelectedFecha(newValue);
+        if (newValue) {
+            setCita({
+                ...cita,
+                fecha: newValue.format('MM/DD/YYYY'),
+            });
+        }
+    };
+
+    const handleTimeChange = (newValue) => {
+        setSelectedHora(newValue);
+        if (newValue) {
+            setCita({
+                ...cita,
+                hora: newValue.format('hh:mm A'),
+            });
+        }
     };
 
     //Eliminar - START
@@ -225,7 +256,7 @@ function EditarCitaComponent() {
                         <div>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DemoContainer components={['DatePicker']}>
-                                    <DatePicker name="fecha" value={selectedFecha} onChange={handleDataChange} />
+                                    <DatePicker name="fecha" value={selectedFecha} onChange={handleDateChange} />
                                 </DemoContainer>
                             </LocalizationProvider>
                         </div>

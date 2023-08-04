@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import { green } from "@mui/material/colors";
 import { Autocomplete, TextField, selectClasses } from "@mui/material";
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 function NuevaCitaComponent() {
     const location = useLocation();
@@ -30,6 +35,59 @@ function NuevaCitaComponent() {
         };
     }, []);
 
+    const getData = async () => {
+        const response = await axios.get('http://127.0.0.1:8000/api/pacientes').then((response) => {
+            console.log(response.data);
+            setRows(response.data);
+        });
+    };
+
+    const [rows, setRows] = useState([]);
+
+    useEffect(() => {
+        console.log('Reader');
+        getData();
+    }, []);
+
+    const EnfermedadRowClick = (params) => {
+        console.log('ID: ' + params.row.id)
+        console.log('Nombre: ' + params.row.id)
+        navigate('/enfermedad/nuevo', {
+            state: {
+                id: params.row.id,
+                nombre: params.row.nombre,
+            }
+        })
+    }
+
+    const getDataa = async () => {
+        const response = await axios.get('http://127.0.0.1:8000/api/doctores').then((response) => {
+            console.log(response.data);
+            setRowss(response.data);
+        });
+    };
+
+    const getDataaa = async () => {
+        const response = await axios.get('http://127.0.0.1:8000/api/enfermedades').then((response) => {
+            console.log(response.data);
+            setRowsss(response.data);
+        });
+    };
+
+    const [rowsss, setRowsss] = useState([]);
+
+    useEffect(() => {
+        console.log('Reader');
+        getDataaa();
+    }, []);
+
+    const [rowss, setRowss] = useState([]);
+
+    useEffect(() => {
+        console.log('Reader');
+        getDataa();
+    }, []);
+
     //Animacion de carga de botón - END
 
     const [cita, setCita] = useState({
@@ -46,6 +104,13 @@ function NuevaCitaComponent() {
     const [selectedDoctor, setSelectedDoctor] = useState(null);
     const [selectedFecha, setSelectedFecha] = useState(cita.fecha);
     const [selectedHora, setSelectedHora] = useState(cita.hora);
+
+    const inputChange = (event) => {
+        setCita({
+            ...cita,
+            [event.target.name]: event.target.value,
+        });
+    };
 
     const handleDateChange = (newValue) => {
         setSelectedFecha(newValue);
@@ -67,23 +132,24 @@ function NuevaCitaComponent() {
         }
     };
 
-    const inputChange = (event) => {
-        setCita({
-            ...cita,
-            [event.target.name]: event.target.value,
-        });
-    };
-
     const fnMandarDatos = async () => {
-        cita.nombre_Paciente = selectedPaciente ? selectedPaciente.nombre : '';
-        cita.nombre_Enfermedad = selectedEnfermedad ? selectedEnfermedad.nombre : '';
-        cita.nombre_Doctor = selectedDoctor ? selectedDoctor.nombre : '';
+        cita.nombre_paciente = selectedPaciente ? selectedPaciente.nombre : '';
+        cita.nombre_enfermedad = selectedEnfermedad ? selectedEnfermedad.nombre : '';
+        cita.nombre_doctor = selectedDoctor ? selectedDoctor.nombre : '';
+
+        if (selectedFecha) {
+            cita.fecha = selectedFecha.format('MM/DD/YYYY');
+        }
+
+        if (selectedHora) {
+            cita.hora = selectedHora.format('hh:mm A');
+        }
 
         console.log("Paciente: " + cita.nombre_paciente);
-        console.log("Motivo: " + cita.row.nombre_enfermedad);
-        console.log("Doctor: " + cita.row.nombre_doctor);
-        console.log("Fecha: " + cita.row.fecha);
-        console.log("Hora: " + cita.row.hora);
+        console.log("Motivo: " + cita.nombre_enfermedad);
+        console.log("Doctor: " + cita.nombre_doctor);
+        console.log("Fecha: " + cita.fecha);
+        console.log("Hora: " + cita.hora);
 
         setLoading(true);
         setSuccess(false);
@@ -94,7 +160,7 @@ function NuevaCitaComponent() {
                 setCita(response.data);
                 setLoading(false);
                 setSuccess(true);
-
+                
                 timer.current = window.setTimeout(() => {
                     navigate("/citas");
                 }, 2000);
@@ -102,7 +168,26 @@ function NuevaCitaComponent() {
             .catch((error) => { });
     };
 
-    const [row, setRow] = useState([]);
+    useEffect(() => {
+        if (cita.nombre_paciente) {
+            const pacienteSeleccionado = rows.find((paciente) => paciente.nombre === cita.nombre_paciente);
+            setSelectedPaciente(pacienteSeleccionado);
+        }
+    }, [cita.nombre_paciente, rows]);
+
+    useEffect(() => {
+        if (cita.nombre_doctor) {
+            const doctorSeleccionado = rowss.find((doctor) => doctor.nombre === cita.nombre_doctor);
+            setSelectedDoctor(doctorSeleccionado);
+        }
+    }, [cita.nombre_doctor, rowss]);
+
+    useEffect(() => {
+        if (cita.nombre_enfermedad) {
+            const enfermedadSeleccionada = rowsss.find((enfermedad) => enfermedad.nombre === cita.nombre_enfermedad);
+            setSelectedEnfermedad(enfermedadSeleccionada);
+        }
+    }, [cita.nombre_enfermedad, rowsss]);
 
     return (
         <form>
@@ -112,7 +197,7 @@ function NuevaCitaComponent() {
                     <div className="mb-3">
                         <Autocomplete
                             name="nombre_paciente"
-                            options={row}
+                            options={rows}
                             getOptionLabel={(option) => option.nombre}
                             renderInput={(params) => (
                                 <TextField {...params} label="Paciente" value={cita.nombre_paciente} onChange={inputChange} />
@@ -125,7 +210,7 @@ function NuevaCitaComponent() {
                     <div className="mb-3">
                         <Autocomplete
                             name="nombre_enfermedad"
-                            options={row}
+                            options={rowsss}
                             getOptionLabel={(option) => option.nombre}
                             renderInput={(params) => (
                                 <TextField {...params} label="Enfermedad" value={cita.nombre_enfermedad} onChange={inputChange} />
@@ -138,8 +223,8 @@ function NuevaCitaComponent() {
                     <div className="mb-3">
                         <Autocomplete
                             name="nombre_doctor"
-                            options={row}
-                            getOptionLabel={(option) => option.nombre_doctor}
+                            options={rowss}
+                            getOptionLabel={(option) => option.nombre}
                             renderInput={(params) => (
                                 <TextField {...params} label="Doctor" value={cita.nombre_doctor} onChange={inputChange} />
                             )}
@@ -149,18 +234,30 @@ function NuevaCitaComponent() {
                     </div>
 
 
+
                     <div className="mb-3">
-                        <input
-                            type="date"
-                            name="fecha"
-                            className="form-control"
-                            value={cita.fecha}
-                            onChange={(e) => inputChange(e)}
-                        />
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer components={['DatePicker']}>
+                                <DatePicker name="fecha" value={selectedFecha} onChange={handleDateChange} />
+                            </DemoContainer>
+                        </LocalizationProvider>
                     </div>
 
                     <div className="mb-3">
-                        <input type="time" name="hora" className="form-control" value={cita.hora} onChange={(e) => inputChange(e)} />
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer
+                                components={[
+                                    'TimePicker',
+                                    'MobileTimePicker',
+                                    'DesktopTimePicker',
+                                    'StaticTimePicker',
+                                ]}
+                            >
+                                <DemoItem label="Hora">
+                                    <MobileTimePicker name="hora" value={selectedHora} onChange={handleTimeChange} />
+                                </DemoItem>
+                            </DemoContainer>
+                        </LocalizationProvider>
                     </div>
 
                     <div className="d-grid position-relative">
