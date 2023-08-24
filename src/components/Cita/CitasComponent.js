@@ -39,7 +39,7 @@ const CitasComponent = () => {
   const handleRowClick = (params) => {
     console.log("ID: " + params.row.id);
     console.log("Paciente: " + params.row.nombre_paciente);
-    console.log("Motivo: " + params.row.nombre_enfermedad);
+    console.log("Enfermedad: " + params.row.nombre_enfermedad);
     console.log("Doctor: " + params.row.nombre_doctor);
     console.log("Fecha: " + params.row.fecha);
     console.log("Hora: " + params.row.hora);
